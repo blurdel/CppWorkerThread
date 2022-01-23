@@ -10,13 +10,14 @@ public:
 	MyWorker() {};
 	virtual ~MyWorker() { std::cout << "~MyWorker" << std::endl; };
 
-	void run() override {
+
+	void work() override {
 
 		while (!mStop) {
 			std::cout << "Running ..." << std::endl;
 			usleep(1000000); // 1 second
 		}
-		std::cout << "Stopped." << std::endl;
+		std::cout << "Stopped" << std::endl;
 	}
 
 };

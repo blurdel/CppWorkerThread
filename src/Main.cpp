@@ -10,13 +10,9 @@ int main() {
 
 	MyWorker w;
 
-	if (w.start() == 0) {
-		usleep(10000000); // Let thread run 10 seconds
-		w.stop();
-	}
-	else {
-		cout << "Error!" << endl;
-	}
+	w.start();
+	usleep(5000000); // Let thread run 5 seconds
+	w.stop();
 
 	return 0;
 }

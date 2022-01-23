@@ -7,33 +7,33 @@
 
 class IWorker {
 public:
-	IWorker() {};
-	virtual ~IWorker() {};
+	IWorker() {}
+	virtual ~IWorker() {}
 
-	virtual void run() = 0; // implementation
+	virtual void work() = 0; // implementation
 
 
-	int start() {
-		return pthread_create(
-				&mThreadId,
-				nullptr,
-				[](void* self) -> void* { // captureless lambda
-					static_cast<IWorker*>(self)->run();
+	void start() {
+		std::thread thrd(
+				[](void* self) {
+					static_cast<IWorker*>(self)->work();
 					return nullptr;
 				},
 				this); // 'this' as argument to lambda
+
+		mThd = std::move(thrd);
 	}
 
 	void stop() {
 		mStop = true;
 		// wait for the thread to exit by joining
-		pthread_join(mThreadId, nullptr);
+		mThd.join();
 	}
 
 
 protected:
-	pthread_t mThreadId { 0 };
-	std::atomic<bool> mStop { false };
+	std::thread mThd{};
+	std::atomic<bool> mStop{};
 };
 
 #endif
